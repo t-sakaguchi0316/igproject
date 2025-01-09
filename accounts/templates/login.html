@@ -1,0 +1,96 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="ja">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Log in</title>
+
+
+    <style>
+        .bg-placeholder-img {
+            font-size: 1.125rem;
+            text-anchor: middle;
+            -webkit-user-select: none;
+            -moz-user-select: none;
+            user-select: none;
+        }
+
+        @media(min-width:768px) {
+            .bg-placeholder-img-lg {
+                font-size: 3.5rem;
+            }
+        }
+
+        .navbar-brand {
+            font-family: 'Arial', sans-serif;
+            font-size: 1.5rem;
+            background-color: white;
+        }
+        #id_username {
+        position: absolute;
+        top: 40%;           /* 垂直方向の中央 */
+        left: 50%;          /* 水平方向の中央 */
+        transform: translate(-50%, -50%); /* 要素の中心を基準に移動 */
+        width: 200px;       /* 横幅 */
+        height: 30px;       /* 高さ */
+        }
+        #id_password{
+            position: absolute;
+            top: 50%;           /* 垂直方向の中央 */
+            left: 50%;          /* 水平方向の中央 */
+            transform: translate(-50%, -50%); /* 要素の中心を基準に移動 */
+            width: 200px;       /* 横幅 */
+            height: 30px;       /* 高さ */
+        }
+        
+    </style>
+
+</head>
+{% include "header.html" %}
+
+<body class="text-center">
+    <main class="form-signin">
+        {% if form.errors %}
+        <p style="color: red;">ユーザー名とパスワードが一致しません。</p>
+        {% endif %}
+
+        <form method="post">
+            {% csrf_token %}
+            <h1 class="h3 mb-3 fw-normal" style="margin: 100px;">サインイン</h1>
+
+
+            <label for="Username" class="visually-hidden">
+                User name</label>
+
+            <input type="text" 
+            name="username" 
+            id="id_username"
+            maxlength="150"
+            autocapitalize="none"
+            autocomplete="username"
+            class="form-control"
+            placeholder="ユーザ名"
+            required autofocus
+            style="width: 200px; height: 30px;">
+
+            <label for="password" class="visually-hidden">
+            </label>
+
+            <input type="password" name="password" id="id_password" autocomplete="current-password" class="form-control"
+                placeholder="パスワード" required autofocus>
+
+            <input class="w-30 btn btn-lg btn-primary" type="submit" value="ログイン" style="margin: 150px auto 0 0px;">
+
+            <br></br>
+            <p><a href="{% url 'password_reset' %}">パスワードを忘れましたか？</a></p>
+            <input type="hidden" name="next" value="{% url 'hi_light:index' %}">
+
+
+        </form>
+    </main>
+
+</body>
+
+</html>

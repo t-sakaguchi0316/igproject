@@ -1,0 +1,41 @@
+{% load static%}
+
+<link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+<!-- ナビゲーションバー -->
+
+<nav class="navbar navbar-expand-lg navbar-light bg-light border-bottom">
+    <div class="container" >
+        <a class="navbar-brand" href="{% url 'hi_light:index' %}"><img src="{% static 'img/logo2.jpg' %}" alt="logo" width="120" height="50"></a>
+        <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+            <span class="navbar-toggler-icon"></span>
+        </button>
+        <div class="collapse navbar-collapse" id="navbarNav">
+            <ul class="navbar-nav ms-auto">
+                
+                {% if user.is_authenticated %}
+                <li class="nav-item">
+                    <a class="nav-link" href="{% url 'hi_light:discover' %}">探索</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="{% url 'hi_light:liked_posts' %}">いいね！</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="{% url 'hi_light:notify' %}">通知</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="{% url 'hi_light:profile' %}">プロフィール</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="{% url 'hi_light:post' %}">投稿</a>
+                </li>
+                <div class="vr"></div>
+                <li class="nav-item">
+                    <a class="nav-link" href="{% url 'accounts:logout' %}">ログアウト</a>
+                </li>
+                {% endif %}
+            </ul>
+        </div>
+    </div>
+</nav>
+
+

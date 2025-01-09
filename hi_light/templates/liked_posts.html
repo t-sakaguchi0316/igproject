@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>いいねした投稿</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <style>
+        /* ギャラリーの投稿をグリッドで配置 */
+        .gallery {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); /* カードの幅を最小250pxで調整 */
+            gap: 20px; /* カード間の間隔 */
+        }
+
+        /* 画像のトリミング設定 */
+        .card-img-top {
+            width: 100%;  /* 親要素に合わせて画像を伸縮 */
+            height: 200px;  /* 高さを固定 */
+            object-fit: cover;  /* 画像をトリミングして親要素に収める */
+            object-position: center;  /* 画像の中心を表示 */
+        }
+
+        /* 画面幅が小さい場合のレスポンシブ対応 */
+        @media (max-width: 576px) {
+            .card {
+                margin: 0 auto;  /* スマホでカードを中央に配置 */
+            }
+        }
+    </style>
+</head>
+<body>
+    {% include "header.html" %}
+    <div class="container mt-4">
+        <h3 class="text-center mb-4">いいねした投稿</h3>
+        <div class="gallery">
+            {% for post in liked_posts %}
+            <div class="card">
+                <img src="{{ post.image1.url }}" class="card-img-top" alt="投稿画像">
+                <div class="card-body">
+                    <h5 class="card-title text-truncate">{{ post.title }}</h5>
+                    <p class="card-text text-truncate">{{ post.comment }}</p>
+                    <p class="text-muted">いいね数: {{ post.like_count }}</p>
+                </div>
+            </div>
+            {% empty %}
+            <p>まだいいねした投稿はありません。</p>
+            {% endfor %}
+        </div>
+</body>
+</html>

@@ -1,0 +1,135 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>HI-LIGHT</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="{% static 'css/html.css' %}">
+    <meta name="csrf-token" content="{{ csrf_token }}">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons/font/bootstrap-icons.css" rel="stylesheet">
+    <meta name="csrf-token" content="{{ csrf_token }}">
+
+</head>
+<body>
+    {% include "header.html" %}
+    <div class="container mt-4">
+        <div class="row d-flex">
+            <div class="col-md-8">
+                <!-- index.html (または他のテンプレート) -->
+                {% for record in object_list %}
+                <div class="card mb-4">
+                    <a href="{% url 'hi_light:detail' record.pk %}" class="text-decoration-none">
+                        <img src="{{ record.image1.url }}" class="card-img-top" alt="投稿画像">
+                    </a>
+                    <div class="card-body">
+                        <h5 class="card-title" style="text-align: center;">{{ record.title }}</h5>
+                        <div class="d-flex align-items-center">
+                            {% if record.icon %}
+                            <img src="{{ record.icon.url }}" class="rounded-circle me-3" alt="ユーザーアイコン" width="40" height="40">
+                            {% else %}
+                            <img src="https://via.placeholder.com/40" class="rounded-circle me-3" alt="ユーザーアイコン">
+                            {% endif %}
+                            <small class="text-muted">{{ record.user.username }}</small>
+                        </div>
+                        <p class="card-text">{{ record.comment }}</p>
+
+                        {% if user.is_authenticated %}
+                        <div id="post-{{ record.id }}" class="d-flex align-items-center">
+                            {% if record.id in liked_posts %}
+                            <!-- いいねを取り消すボタン -->
+                            <button class="btn btn-primary like-button d-flex align-items-center me-3" data-post-id="{{ record.id }}">
+                                <i class="bi bi-heart-fill me-2"></i> いいねを取り消す
+                            </button>
+                            {% else %}
+                            <!-- いいねボタン -->
+                            <button class="btn btn-outline-primary like-button d-flex align-items-center me-3" data-post-id="{{ record.id }}">
+                                <i class="bi bi-heart me-2"></i>いいね
+                            </button>
+                            {% endif %}
+                            <!-- いいねカウント -->
+                            <span class="like-count h5">{{ record.like_count }}</span>
+                        </div>
+                        {% endif %}
+                    </div>
+                </div>
+                {% endfor %}
+            </div>
+
+            <div class="col-md-4">
+                {% if user.is_authenticated %}
+                <div class="card mb-4">
+                    <div class="card-body">
+                        <h5 class="card-title">プロフィール</h5>
+                        <div class="d-flex align-items-center mb-3">
+                            <div>
+                                <h6 class="mb-0">ようこそ{{ user.username }}さん</h6>
+                                <p class="text-muted mb-0"></p>
+                            </div>
+                        </div>
+                        <a href="{% url 'hi_light:profile_edit' %}">
+                            <button class="btn btn-outline-success w-100">プロフィールを編集</button>
+                        </a>
+                        <p></p>
+                        <a href="{% url 'hi_light:post' %}">
+                            <button class="btn btn-outline-success w-100">新規投稿</button>
+                        </a>
+                    </div>
+                </div>
+                {% else %}
+                <div class="card mb-4">
+                    <div class="card-body">
+                        <h5 class="card-title text-center" style="color: green;">ログイン</h5>
+                        <a href="{% url 'accounts:login' %}">
+                            <button class="btn btn-outline-success w-100">ログイン</button>
+                        </a>
+                        <p></p>
+                        <a href="{% url 'accounts:signup' %}">
+                            <button class="btn btn-outline-success w-100">会員登録</button>
+                        </a>
+                    </div>
+                </div>
+                {% endif %}
+            </div>
+        </div>
+
+        <script>
+            document.addEventListener('DOMContentLoaded', () => {
+                const likeButtons = document.querySelectorAll('.like-button');
+
+                likeButtons.forEach(button => {
+                    button.addEventListener('click', () => {
+                        const postId = button.getAttribute('data-post-id');
+                        const csrfToken = document.querySelector('meta[name="csrf-token"]').getAttribute('content');
+
+                        fetch(`/post/${postId}/like/`, {
+                            method: 'POST',
+                            headers: {
+                                'Content-Type': 'application/json',
+                                'X-CSRFToken': csrfToken,
+                            },
+                            body: JSON.stringify({ post_id: postId }),
+                        })
+                        .then(response => response.json())
+                        .then(data => {
+                            if (data.success) {
+                                const likeCount = document.querySelector(`#post-${postId} .like-count`);
+                                likeCount.textContent = data.like_count;
+                                button.textContent = data.liked ? 'いいねを取り消す' :'いいね';
+                                button.classList.toggle('btn-primary');
+                                button.classList.toggle('btn-outline-primary');
+                            } else {
+                                alert('エラーが発生しました');
+                            }
+                        })
+                        .catch(error => {
+                            console.error('エラー:', error);
+                            alert('通信エラーが発生しました');
+                        });
+                    });
+                });
+            });
+        </script>
+    </body>
+</html>

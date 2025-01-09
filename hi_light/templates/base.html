@@ -1,0 +1,32 @@
+
+<!-- ナビゲーションバー -->
+<nav class="navbar navbar-expand-lg navbar-light bg-light border-bottom">
+    <div class="container" >
+        <a class="navbar-brand" href="home.html"><img src="img/logo2.jpg" alt="logo" width="120" height="50"></a>
+        <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+            <span class="navbar-toggler-icon"></span>
+        </button>
+        <div class="collapse navbar-collapse" id="navbarNav">
+            <ul class="navbar-nav ms-auto">
+                <li class="nav-item">
+                    <a class="nav-link" href="{% url 'index' %}">ホーム</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="{% url 'hi_light:like' %}">いいね！</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="{% url 'hi_light:notify' %}">通知</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="{% url 'hi_light:discover' %}">探索</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="{% url 'hi_light:pf' %}">プロフィール</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="{% url 'accounts:signup' %}">ログイン</a>
+                </li>
+            </ul>
+        </div>
+    </div>
+</nav>

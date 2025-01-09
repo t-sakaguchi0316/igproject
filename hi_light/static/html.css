@@ -1,0 +1,39 @@
+/* styles.css */
+body {
+    background-color: white;
+}
+
+.navbar-brand {
+    font-family: 'Arial', sans-serif;
+    font-size: 1.5rem;
+    background-color: white;
+}
+
+.card {
+    border-radius: 15px;
+    overflow: hidden;
+}
+
+.card-title {
+    font-weight: bold;
+}
+
+.like-btn {
+    background-color: #00CCCC;
+    border: none;
+    color: white;
+    font-family: "Yu Gothic";
+}
+.like-btn:hover {
+    background-color: #cc3399;
+}
+
+.list-group-item {
+    border: none;
+}
+
+.rounded-circle {
+    object-fit: cover;
+}
+
+

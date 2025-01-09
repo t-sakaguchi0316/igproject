@@ -1,0 +1,16 @@
+いいね機能
+通知機能
+プロフィールで自分の投稿のみ表示
+
+@method_decorator(login_required, name='dispatch')
+class CreatePhotoView(CreateView):
+    form_class=PhotoPostForm
+    template_name="post_photo.html"
+    success_url=reverse_lazy('hi_light:post_done')
+    
+    def form_valid(self, form):
+        postdata=form.save(commit=False)
+        postdata.user=self.request.user
+        postdata.save()
+        return super().form_valid(form)
+    
