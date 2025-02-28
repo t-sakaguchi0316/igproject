@@ -57,13 +57,21 @@
         <div class="row photo-grid">
             {% for record in object_list %}
             <div class="col-md-4 col-sm-6 col-lg-3">
+                <a href="{% url 'hi_light:detail' record.pk %}">
                 <div class="card mb-4">
                     <img src="{{ record.image1.url }}" class="card-img-top" alt="投稿画像">
                     <div class="card-body">
                         <h5 class="card-title">{{ record.title }}</h5>
                         <div class="d-flex align-items-center justify-content-center">
+                        </a>
+                            {% if record.icon %}
+                            <img src="{{ record.icon.url }}" class="rounded-circle me-2" alt="ユーザー" width="40" height="40">
+                            <small class="text-muted">{{ record.user.username }}</small>
+                            {% else %}
                             <img src="https://via.placeholder.com/40" class="rounded-circle me-2" alt="ユーザー">
                             <small class="text-muted">{{ record.user.username }}</small>
+                            {% endif %}
+                        
                         </div>
                     </div>
                 </div>

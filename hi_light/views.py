@@ -32,7 +32,6 @@ class IndexView(ListView):
 
 
 
-# hi_light/views.py
 class ProfileView(ListView):
     template_name = 'profile.html'
     context_object_name = 'profiles'
@@ -70,7 +69,7 @@ class CreatePhotoView(CreateView):
         return super().form_valid(form)
 
 
-# hi_light/views.py
+
 @method_decorator(login_required, name='dispatch')
 class ProfileEditView(UpdateView):
     model = CustomUser
@@ -120,7 +119,30 @@ class DiscoverView(ListView):
         return render(request, self.template_name, {'form': form})
 
 
-    
+from django.views.generic import ListView
+from django.views.generic.edit import FormMixin
+from django.shortcuts import redirect, render
+from .models import PhotoPost
+from .forms import PhotoPostForm
+
+class DiscoverView(FormMixin, ListView):
+    template_name = 'discover.html'
+    context_object_name = 'posts'
+    model = PhotoPost
+    queryset = PhotoPost.objects.order_by('-posted_at')
+    form_class = PhotoPostForm  # フォームを指定
+
+    def post(self, request, *args, **kwargs):
+        form = self.get_form()
+        if form.is_valid():
+            post = form.save(commit=False)
+            post.user = request.user
+            post.icon = request.user.icon
+            post.introduction = request.user.introduction
+            post.save()
+            return redirect('index')
+        return self.get(request, *args, **kwargs)
+
     
 class DetailView(DetailView):
     template_name='detail.html'
@@ -138,6 +160,8 @@ from django.contrib.auth.decorators import login_required
 from .models import PhotoPost, Like
 
 
+from .models import Notification
+
 @login_required
 def like_post(request, post_id):
     post = get_object_or_404(PhotoPost, id=post_id)
@@ -152,9 +176,14 @@ def like_post(request, post_id):
         post.like_count += 1
         liked = True
 
-    post.save()
-    print(f"Post {post_id} updated: like_count={post.like_count}, liked={liked}")  # デバッグ用
+        # 通知を作成
+        if post.user != user:  # 自分の投稿には通知を送らない
+            Notification.objects.create(
+                recipient=post.user,
+                message=f"{user.username} さんがあなたの投稿にいいねしました。",
+            )
 
+    post.save()
     return JsonResponse({
         'success': True,
         'like_count': post.like_count,
@@ -174,5 +203,22 @@ def liked_posts(request):
         liked_posts = []
     return render(request, 'liked_posts.html', {'liked_posts': liked_posts})
 
-class notifyView(TemplateView):
-    template_name='notifications.html'
+from django.views.generic import ListView
+from .models import Notification
+
+@method_decorator(login_required, name='dispatch')
+class NotificationListView(ListView):
+    model = Notification
+    template_name = "notifications.html"
+    context_object_name = "notifications"
+
+    def get_queryset(self):
+        queryset = Notification.objects.filter(recipient=self.request.user).order_by('-timestamp')
+        print(queryset)  # デバッグ: コンソールにクエリセットを表示
+        return queryset
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        print(context['notifications'])  # デバッグ: テンプレートに渡されるデータを確認
+        return context
+

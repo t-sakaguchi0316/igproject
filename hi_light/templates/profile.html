@@ -6,7 +6,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>プロフィール編集ページ</title>
+    <title>プロフィール編集</title>
     <!-- Bootstrap CSS -->
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/css/bootstrap.min.css" rel="stylesheet">
     <style>
@@ -82,18 +82,22 @@
             {% csrf_token %}
             <div class="row">
                 <!-- アイコン画像 -->
-                
+
                 <div class="col-12 text-center">
                     <div class="profile-icon-container">
                         {% if profile and profile.icon %}
-                            <img src="{{ profile.icon.url }}" alt="プロフィール画像" class="profile-icon">
+                        <img src="{{ profile.icon.url }}" alt="プロフィール画像" class="profile-icon">
                         {% else %}
-                            <img src="{% static 'default_icon.png' %}" class="profile-icon" alt="デフォルトアイコン">
+                        <img src="{% static 'default_icon.png' %}" class="profile-icon" alt="デフォルトアイコン">
                         {% endif %}
                         <br>
-                        <h2>{{ profile.user.username }}</h2>
-                        <a href="{% url 'hi_light:profile_edit' %}" class="btn btn-primary" id="change-icon-btn">プロフィールを編集</a>
-                    </div>
+                        <br>
+                        {% if object_list %}
+                        <h2>{{ object_list.0.user.username }}</h2>
+                        {% endif %}
+                        <a href="{% url 'hi_light:profile_edit' %}" class="btn btn-primary"
+                            id="change-icon-btn">プロフィールを編集</a>
+                        </div>
                 </div>
                 <!-- 自己紹介 -->
                 <div class="col-12 mt-4">
@@ -101,34 +105,40 @@
                         <label for="id_introduction" class="form-label">自己紹介</label>
                         <p>
                             {% if profile and profile.introduction %}
-                                {{ profile.introduction }}
+                            {{ profile.introduction }}
                             {% else %}
-                                自己紹介がまだ設定されていません。
+                            自己紹介がまだ設定されていません。
                             {% endif %}
                         </p>
                     </div>
                 </div>
-                
 
-    <!-- 投稿内容 -->
-    <div class="container mt-5">
-        <h3>自分の投稿</h3>
-        <div class="row photo-grid">
-            {% for record in object_list %}
-                <div class="col-md-4 col-sm-6 col-lg-3">
-                    <div class="card mb-4">
-                        <img src="{{ record.image1.url }}" class="card-img-top" alt="投稿画像">
-                        <div class="card-body">
-                            <h5 class="card-title">{{ record.title }}</h5>
+
+                <!-- 投稿内容 -->
+                
+                <div class="container mt-5">
+                    <h3>自分の投稿</h3>
+                    <div class="row photo-grid">
+                        {% for record in object_list %}
+                        <div class="col-md-4 col-sm-6 col-lg-3">
+                            <div class="card mb-4">
+                                <a href="{% url 'hi_light:detail' record.pk %}">
+                                <img src="{{ record.image1.url }}" class="card-img-top" alt="投稿画像">
+                                <div class="card-body">
+                                    <h5 class="card-title">{{ record.title }}</h5>
+                                </div>
+                            </a>
+                            </div>
                         </div>
+                        {% endfor %}
                     </div>
                 </div>
-            {% endfor %}
-        </div>
-    </div>
-    
-    <!-- BootstrapとJavaScript -->
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/js/bootstrap.bundle.min.js"></script>
+                
+
+                <!-- BootstrapとJavaScript -->
+                <script
+                    src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/js/bootstrap.bundle.min.js">
+                </script>
 </body>
 
 </html>

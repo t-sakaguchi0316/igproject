@@ -1,10 +1,33 @@
 {% include "header.html" %}
 
 <div class="container">
-    <div class ="row">
-        <div class ="col offset-4 py-4">
+    <div class="row justify-content-center">
+        <div class="col-md-6 text-center py-4">
             <h3>投稿完了しました！</h3>
-            <p><a href="{% url 'hi_light:index' %}">トップページへ</a></p>
+            <p><a href="{% url 'hi_light:index' %}" class="btn btn-primary mt-3">トップページへ</a></p>
+
+            <!-- Lottieアニメーション -->
+            <dotlottie-player 
+                id="lottieAnimation"
+                src="https://lottie.host/ecf6faec-dfa2-4415-8ee7-02df9e0b036d/i2G325fsht.lottie" 
+                background="transparent" 
+                speed="1.2"  
+                style="width: 250px; height: 250px; margin-top: 20px;" 
+                loop 
+                autoplay>
+            </dotlottie-player>
         </div>
     </div>
 </div>
+
+
+<script src="https://unpkg.com/@dotlottie/player-component@2.7.12/dist/dotlottie-player.mjs" type="module" defer></script>
+
+<script>
+    document.addEventListener("DOMContentLoaded", function() {
+        const lottiePlayer = document.getElementById("lottieAnimation");
+        if (lottiePlayer) {
+            lottiePlayer.load("https://lottie.host/ecf6faec-dfa2-4415-8ee7-02df9e0b036d/i2G325fsht.lottie");
+        }
+    });
+</script>

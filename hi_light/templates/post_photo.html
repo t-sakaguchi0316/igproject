@@ -1,4 +1,3 @@
-<!-- ベーステンプレートを適用する -->
 {% include 'header.html' %}
 
 
@@ -14,6 +13,11 @@
 
             <table>
                 <tr>
+                    <th>画像1</th>
+                    <td>{{ form.image1 }}</td>
+
+                </tr>
+                <tr>
                     <th>カテゴリ</th>
                     <td>{{ form.category }}</td>
 
@@ -28,11 +32,7 @@
                     <td>{{ form.comment }}</td>
 
                 </tr>
-                <tr>
-                    <th>画像1</th>
-                    <td>{{ form.image1 }}</td>
-
-                </tr>
+                
                 
             </table>
             <hr>

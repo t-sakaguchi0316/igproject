@@ -1,6 +1,8 @@
 #hi_light/urls
 from django.urls import path
 from . import views
+from .views import NotificationListView
+
 
 app_name = 'hi_light'
 
@@ -16,7 +18,11 @@ urlpatterns = [
     path('detail/', views.DetailView.as_view(), name='detail'),
     path('post/<int:post_id>/like/', views.like_post, name='like_post'),
     path('liked_posts/', views.liked_posts, name='liked_posts'),
-    path('notify/', views.notifyView.as_view(), name='notify'),
+    
 ]
 
-# urls.py
+urlpatterns += [
+    path('notifications/', NotificationListView.as_view(), name='notifications'),
+]
+
+

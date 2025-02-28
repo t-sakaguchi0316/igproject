@@ -7,59 +7,68 @@
     <title>写真の詳細ページ</title>
     <!-- Bootstrap CSS -->
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/css/bootstrap.min.css" rel="stylesheet">
+    <!-- Google Fonts -->
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600&display=swap" rel="stylesheet">
     <style>
         body {
-            background-color: #f7f7f7;
+            background-color: #f4f4f9;
+            font-family: 'Poppins', sans-serif;
+            color: #333;
         }
 
         .photo-detail-container {
-            margin-top: 50px;
-            padding: 20px;
+            margin-top: 60px;
+            padding: 25px;
             background-color: #ffffff;
-            border-radius: 10px;
-            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+            border-radius: 12px;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+            text-align: center;
         }
 
         .photo-img {
             width: 100%;
             height: auto;
-            border-radius: 8px;
-            margin-bottom: 30px;
-            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+            border-radius: 10px;
+            margin-bottom: 25px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
         }
 
         .info-box {
-            background-color: #fafafa;
-            padding: 20px;
-            border-radius: 10px;
-            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+            background-color: #ffffff;
+            padding: 15px;
+            border-radius: 8px;
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
             margin-bottom: 20px;
+            text-align: left;
         }
 
-        .info-box h4 {
-            font-size: 1.5rem;
-            margin-bottom: 10px;
-            color: #333;
+        .info-box h5 {
+            font-size: 1.3rem;
+            margin-bottom: 8px;
+            font-weight: 600;
+            color: #444;
         }
 
         .info-box p {
             font-size: 1.1rem;
-            color: #555;
+            color: #666;
         }
 
         .back-btn {
-            display: block;
-            text-align: center;
+            display: inline-block;
             font-size: 1rem;
-            background-color: #007bff;
+            font-weight: 500;
+            background-color: #6c5ce7;
             color: white;
-            padding: 10px 20px;
-            border-radius: 5px;
+            padding: 12px 25px;
+            border-radius: 25px;
             text-decoration: none;
+            transition: all 0.3s ease-in-out;
         }
 
         .back-btn:hover {
-            background-color: #0056b3;
+            background-color: #4a47a3;
+            transform: translateY(-3px);
         }
     </style>
 </head>
@@ -75,19 +84,18 @@
 
                     <!-- ユーザー情報の表示 -->
                     <div class="info-box">
-                        <h4>ユーザー情報</h4>
-                        <p>ユーザー名: {{ record.user.username }}</p>
+                        <p><strong>ユーザー名:</strong> {{ record.user.username }}</p>
                     </div>
 
                     <!-- タイトルの表示 -->
                     <div class="info-box">
-                        <h4>タイトル</h4>
+                        <h5>タイトル</h5>
                         <p>{{ record.title }}</p>
                     </div>
 
                     <!-- コメントの表示 -->
                     <div class="info-box">
-                        <h4>コメント</h4>
+                        <h5>コメント</h5>
                         <p>{{ record.comment }}</p>
                     </div>
 
