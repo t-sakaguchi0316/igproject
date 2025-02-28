@@ -9,8 +9,10 @@
         /* ギャラリーの投稿をグリッドで配置 */
         .gallery {
             display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); /* カードの幅を最小250pxで調整 */
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); /* 自動的にカラム数を調整 */
             gap: 20px; /* カード間の間隔 */
+            justify-content: center; /* グリッド全体を中央揃え */
+            align-items: start; /* 高さを揃える */
         }
 
         /* 画像のトリミング設定 */
@@ -27,6 +29,20 @@
                 margin: 0 auto;  /* スマホでカードを中央に配置 */
             }
         }
+
+        /* 投稿が1つだけ表示される場合 */
+        .gallery:only-child {
+            grid-template-columns: 1fr; /* 1つの場合でも1列表示 */
+            justify-items: center;  /* センターに配置 */
+        }
+
+        /* 投稿が少ない場合でもバランスよく配置されるように */
+        .gallery {
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); /* 自動的に適切なカラム数に */
+            gap: 20px; /* カード間の間隔 */
+            justify-items: stretch;  /* アイテムが均等に配置されるように */
+        }
+
     </style>
 </head>
 <body>
@@ -47,5 +63,7 @@
             <p>まだいいねした投稿はありません。</p>
             {% endfor %}
         </div>
+    </div>
 </body>
 </html>
+

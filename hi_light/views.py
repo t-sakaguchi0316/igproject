@@ -98,50 +98,30 @@ class PostSuccessView(TemplateView):
 class EditSuccessView(TemplateView):
     template_name='edit_success.html'
     
-class DiscoverView(ListView):
-    template_name='discover.html'
-    context_object_name = 'posts'
-    model = PhotoPost
-    queryset = PhotoPost.objects.order_by('-posted_at')
-
-    def post(self, request, *args, **kwargs):
-        form = PhotoPostForm(request.POST, request.FILES)
-        if form.is_valid():
-            post = form.save(commit=False)
-            post.user = request.user  # ログイン中のユーザーを設定
-
-            # アイコンと自己紹介をユーザーの情報から設定
-            post.icon = request.user.icon  # ユーザーのアイコンを設定
-            post.introduction = request.user.introduction  # ユーザーの自己紹介を設定
-
-            post.save()  # 投稿を保存
-            return redirect('index')
-        return render(request, self.template_name, {'form': form})
-
-
+from django.db.models import Q
 from django.views.generic import ListView
-from django.views.generic.edit import FormMixin
-from django.shortcuts import redirect, render
 from .models import PhotoPost
-from .forms import PhotoPostForm
 
-class DiscoverView(FormMixin, ListView):
+class DiscoverView(ListView):
     template_name = 'discover.html'
-    context_object_name = 'posts'
-    model = PhotoPost
-    queryset = PhotoPost.objects.order_by('-posted_at')
-    form_class = PhotoPostForm  # フォームを指定
+    context_object_name = 'object_list'
+    model = PhotoPost  # 使用するモデル
 
-    def post(self, request, *args, **kwargs):
-        form = self.get_form()
-        if form.is_valid():
-            post = form.save(commit=False)
-            post.user = request.user
-            post.icon = request.user.icon
-            post.introduction = request.user.introduction
-            post.save()
-            return redirect('index')
-        return self.get(request, *args, **kwargs)
+    def get_queryset(self):
+        request = self.request
+        query = request.GET.get('q', '').strip()  # 検索キーワードを取得（前後の空白を除去）
+
+        if query:
+            queryset = PhotoPost.objects.filter(
+                Q(title__icontains=query) | Q(user__username__icontains=query)
+            ).order_by('-posted_at')
+        else:
+            queryset = PhotoPost.objects.all().order_by('-posted_at')  # 全投稿を取得
+
+        print("取得された投稿数:", queryset.count())  # 取得された投稿数を表示
+        return queryset
+
+
 
     
 class DetailView(DetailView):
